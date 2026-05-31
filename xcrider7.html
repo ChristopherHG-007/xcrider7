@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>XCRider7 · Pura Vida, Rider</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600;700&family=Barlow+Condensed:wght@400;600;700;900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --cyan:  #5ecfdc;
+      --red:   #c0392b;
+      --red2:  #e74c3c;
+      --bg:    #050810;
+      --bg2:   #060b12;
+      --bg3:   #080e18;
+      --white: #e8eaf0;
+      --muted: rgba(232,234,240,0.35);
+    }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--white); font-family: 'Rajdhani', sans-serif; overflow-x: hidden; }
+
+    /* INTRO */
+    #intro {
+      position: fixed; inset: 0; background: var(--bg); z-index: 1000;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      transition: opacity 0.9s ease, visibility 0.9s ease;
+    }
+    #intro.hide { opacity: 0; visibility: hidden; pointer-events: none; }
+    .intro-x {
+      font-family: 'Barlow Condensed', sans-serif; font-size: 140px; font-weight: 900;
+      color: var(--cyan); line-height: 1; opacity: 0; transform: scale(0.3);
+      animation: popX 0.65s cubic-bezier(0.34,1.56,0.64,1) 0.3s forwards;
+      filter: drop-shadow(0 0 40px rgba(94,207,220,0.5)); letter-spacing: -4px;
+    }
+    .intro-brand {
+      font-family: 'Barlow Condensed', sans-serif; font-size: 34px; font-weight: 700;
+      letter-spacing: 10px; color: #fff; opacity: 0;
+      animation: fadeUp 0.5s ease 1.0s forwards; margin-top: -6px;
+    }
+    .intro-brand em { color: var(--cyan); font-style: normal; }
+    .intro-tagline {
+      font-size: 13px; letter-spacing: 3px; color: var(--muted); text-transform: uppercase;
+      opacity: 0; animation: fadeUp 0.5s ease 1.3s forwards; margin-top: 10px;
+    }
+    .intro-pv {
+      font-family: 'Barlow Condensed', sans-serif; font-size: 20px; font-weight: 700;
+      letter-spacing: 4px; color: var(--red2); text-transform: uppercase;
+      opacity: 0; animation: fadeUp 0.5s ease 1.6s forwards; margin-top: 24px;
+    }
+    .intro-progress {
+      width: 0; height: 2px; background: linear-gradient(90deg, var(--red), var(--cyan));
+      margin-top: 28px; animation: growBar 1.1s ease 1.9s forwards; border-radius: 2px;
+    }
+    @keyframes popX  { to { opacity:1; transform:scale(1); } }
+    @keyframes fadeUp { from{opacity:0;transform:translateY(14px)} to{opacity:1;transform:translateY(0)} }
+    @keyframes growBar { from{width:0} to{width:220px} }
+
+    /* MAIN */
+    #main { opacity: 0; transition: opacity 0.9s ease; }
+    #main.show { opacity: 1; }
+
+    /* NAV */
+    nav {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 16px 48px; border-bottom: 1px solid rgba(94,207,220,0.1);
+      background: rgba(5,8,16,0.96); position: sticky; top: 0; z-index: 100;
+      backdrop-filter: blur(10px);
+    }
+    .logo { font-family:'Barlow Condensed',sans-serif; font-size:26px; font-weight:900; letter-spacing:3px; color:#fff; text-decoration:none; }
+    .logo span { color: var(--cyan); }
+    .nav-links { display:flex; gap:32px; list-style:none; }
+    .nav-links a { color:rgba(255,255,255,0.45); text-decoration:none; font-size:13px; letter-spacing:1.5px; font-weight:700; text-transform:uppercase; transition:color 0.2s; }
+    .nav-links a:hover { color: var(--cyan); }
+    .nav-cr { font-size:12px; letter-spacing:2px; color:var(--red2); font-weight:700; text-transform:uppercase; }
+
+    /* HERO */
+    .hero {
+      position:relative; padding:100px 48px 80px; text-align:center;
+      overflow:hidden; min-height:540px;
+      display:flex; flex-direction:column; align-items:center; justify-content:center;
+    }
+    .hero::before {
+      content:''; position:absolute; inset:0;
+      background: radial-gradient(ellipse 55% 65% at 50% 40%, rgba(192,57,43,0.22) 0%, transparent 65%),
+                  radial-gradient(ellipse 40% 40% at 70% 60%, rgba(94,207,220,0.07) 0%, transparent 60%);
+      pointer-events:none;
+    }
+    .hero-lines { position:absolute; inset:0; overflow:hidden; pointer-events:none; opacity:0.04; }
+    .hero-lines span { position:absolute; display:block; width:1px; background:var(--cyan); animation:scanline 4s linear infinite; }
+    .hero-lines span:nth-child(1){ left:15%; height:100%; animation-delay:0s; }
+    .hero-lines span:nth-child(2){ left:35%; height:100%; animation-delay:1s; }
+    .hero-lines span:nth-child(3){ left:55%; height:100%; animation-delay:2s; }
+    .hero-lines span:nth-child(4){ left:75%; height:100%; animation-delay:3s; }
+    @keyframes scanline {
+      0%{transform:translateY(-100%);opacity:0} 10%{opacity:1} 90%{opacity:1} 100%{transform:translateY(100%);opacity:0}
+    }
+    .badge-cr {
+      position:relative; display:inline-flex; align-items:center; gap:8px;
+      background:rgba(192,57,43,0.12); border:1px solid rgba(192,57,43,0.35);
+      color:var(--red2); font-size:11px; letter-spacing:2.5px; text-transform:uppercase;
+      padding:6px 18px; border-radius:2px; margin-bottom:30px; font-weight:700;
+    }
+    .hero-title { position:relative; font-family:'Barlow Condensed',sans-serif; font-size:96px; font-weight:900; letter-spacing:4px; color:#fff; line-height:1; margin-bottom:6px; }
+    .hero-title span { color: var(--cyan); }
+    .hero-sub { position:relative; font-size:13px; letter-spacing:5px; color:rgba(255,255,255,0.28); text-transform:uppercase; font-weight:700; margin-bottom:40px; }
+    .divider-x { position:relative; display:flex; align-items:center; gap:18px; justify-content:center; margin-bottom:34px; }
+    .divider-x span { font-family:'Barlow Condensed',sans-serif; font-size:22px; font-weight:900; color:var(--cyan); opacity:0.45; }
+    .divider-line { width:90px; height:1px; background:rgba(94,207,220,0.2); }
+    .hero-slogan {
+      position:relative; font-size:21px; color:rgba(232,234,240,0.82); font-weight:400;
+      max-width:600px; line-height:1.6; border-left:3px solid var(--red);
+      padding-left:20px; text-align:left; margin-bottom:44px;
+    }
+    .cta-row { position:relative; display:flex; gap:14px; justify-content:center; flex-wrap:wrap; }
+    .btn-primary {
+      background:var(--red); color:#fff; border:none; padding:14px 32px;
+      font-family:'Barlow Condensed',sans-serif; font-size:16px; font-weight:700;
+      letter-spacing:2px; text-transform:uppercase; cursor:pointer; border-radius:2px;
+      text-decoration:none; display:inline-block; transition:background 0.2s, transform 0.1s;
+    }
+    .btn-primary:hover { background:#a93226; transform:translateY(-2px); }
+    .btn-outline {
+      background:transparent; color:var(--cyan); border:1px solid rgba(94,207,220,0.35);
+      padding:14px 32px; font-family:'Barlow Condensed',sans-serif; font-size:16px; font-weight:700;
+      letter-spacing:2px; text-transform:uppercase; cursor:pointer; border-radius:2px;
+      text-decoration:none; display:inline-block; transition:border-color 0.2s, background 0.2s, transform 0.1s;
+    }
+    .btn-outline:hover { border-color:var(--cyan); background:rgba(94,207,220,0.07); transform:translateY(-2px); }
+
+    /* STATS */
+    .stats { display:grid; grid-template-columns:repeat(3,1fr); border-top:1px solid rgba(94,207,220,0.1); border-bottom:1px solid rgba(94,207,220,0.1); background:var(--bg2); }
+    .stat { padding:32px 20px; text-align:center; border-right:1px solid rgba(94,207,220,0.08); }
+    .stat:last-child { border-right:none; }
+    .stat-num { font-family:'Barlow Condensed',sans-serif; font-size:42px; font-weight:900; color:var(--cyan); letter-spacing:2px; }
+    .stat-label { font-size:11px; letter-spacing:2px; color:var(--muted); text-transform:uppercase; font-weight:700; margin-top:5px; }
+
+    /* REDES / LINK IN BIO */
+    .redes { padding:70px 48px; background:var(--bg); position:relative; overflow:hidden; }
+    .redes::before {
+      content:''; position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+      width:500px; height:500px;
+      background:radial-gradient(circle, rgba(94,207,220,0.05) 0%, transparent 70%);
+      pointer-events:none;
+    }
+    .redes-header { text-align:center; margin-bottom:48px; position:relative; }
+    .sec-eyebrow { font-size:11px; letter-spacing:3px; color:var(--red); text-transform:uppercase; font-weight:700; margin-bottom:8px; }
+    .sec-title { font-family:'Barlow Condensed',sans-serif; font-size:34px; font-weight:700; letter-spacing:3px; color:#fff; text-transform:uppercase; }
+    .redes-sub { font-size:14px; color:var(--muted); letter-spacing:1px; margin-top:10px; font-family:sans-serif; }
+
+    .redes-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:12px; max-width:960px; margin:0 auto; }
+
+    .red-card {
+      display:flex; align-items:center; gap:18px; padding:22px 24px;
+      background:var(--bg3); border:1px solid rgba(255,255,255,0.05);
+      border-radius:4px; text-decoration:none; color:var(--white);
+      transition:border-color 0.25s, background 0.25s, transform 0.2s;
+      position:relative; overflow:hidden;
+    }
+    .red-card::after {
+      content:''; position:absolute; left:0; top:0; bottom:0; width:3px;
+      background:var(--card-accent, var(--cyan));
+      transform:scaleY(0); transition:transform 0.25s; transform-origin:bottom;
+    }
+    .red-card:hover { background:#0c1520; transform:translateY(-3px); border-color:rgba(255,255,255,0.1); }
+    .red-card:hover::after { transform:scaleY(1); }
+
+    .red-icon { width:46px; height:46px; border-radius:10px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+    .red-icon svg { width:24px; height:24px; }
+    .red-info { flex:1; }
+    .red-name { font-family:'Barlow Condensed',sans-serif; font-size:18px; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; color:#fff; }
+    .red-handle { font-size:12px; color:var(--muted); letter-spacing:1px; margin-top:2px; font-family:sans-serif; }
+    .red-arrow { font-size:18px; color:rgba(255,255,255,0.2); transition:color 0.2s, transform 0.2s; }
+    .red-card:hover .red-arrow { color:var(--cyan); transform:translateX(4px); }
+
+    .card-tiktok { --card-accent:#69C9D0; }
+    .card-ig     { --card-accent:#E1306C; }
+    .card-yt     { --card-accent:#FF0000; }
+    .card-fb     { --card-accent:#1877F2; }
+    .icon-tiktok { background:rgba(105,201,208,0.1); }
+    .icon-ig     { background:rgba(225,48,108,0.1); }
+    .icon-yt     { background:rgba(255,0,0,0.1); }
+    .icon-fb     { background:rgba(24,119,242,0.1); }
+
+    .linkinbio-hint {
+      text-align:center; padding:20px 24px;
+      background:rgba(94,207,220,0.05); border:1px dashed rgba(94,207,220,0.2);
+      border-radius:4px; max-width:960px; margin:28px auto 0;
+    }
+    .hint-title { font-family:'Barlow Condensed',sans-serif; font-size:16px; font-weight:700; letter-spacing:2px; color:var(--cyan); text-transform:uppercase; margin-bottom:6px; }
+    .hint-text  { font-size:13px; color:var(--muted); font-family:sans-serif; line-height:1.6; }
+    .hint-url   { color:var(--cyan); font-weight:700; font-family:monospace; font-size:14px; }
+
+    /* PILLARS */
+    .pillars { padding:70px 48px; background:var(--bg2); }
+    .sec-title-center { text-align:center; margin-bottom:44px; }
+    .pillars-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:3px; max-width:1000px; margin:0 auto; }
+    .pillar { background:var(--bg3); padding:30px 22px 26px; border-top:2px solid transparent; transition:border-color 0.25s, background 0.25s; cursor:default; }
+    .pillar:hover { border-top-color:var(--cyan); background:#0c1520; }
+    .p-num { font-family:'Barlow Condensed',sans-serif; font-size:44px; font-weight:900; color:rgba(94,207,220,0.1); line-height:1; margin-bottom:12px; }
+    .p-title { font-family:'Barlow Condensed',sans-serif; font-size:17px; font-weight:700; letter-spacing:1.5px; color:#fff; text-transform:uppercase; margin-bottom:10px; }
+    .p-desc { font-size:13px; color:rgba(255,255,255,0.38); line-height:1.6; font-family:sans-serif; }
+
+    /* PURA VIDA */
+    .pv-banner {
+      padding:56px 48px; background:var(--bg3);
+      border-top:1px solid rgba(192,57,43,0.2); border-bottom:1px solid rgba(192,57,43,0.2);
+      display:flex; align-items:center; justify-content:center; gap:48px; flex-wrap:wrap; text-align:center;
+    }
+    .pv-flag { font-size:52px; line-height:1; }
+    .pv-tag  { font-size:11px; letter-spacing:3px; color:var(--red2); text-transform:uppercase; font-weight:700; margin-bottom:8px; }
+    .pv-text { font-family:'Barlow Condensed',sans-serif; font-size:34px; font-weight:900; letter-spacing:4px; color:#fff; text-transform:uppercase; }
+    .pv-text span { color:var(--cyan); }
+    .pv-sub  { font-size:13px; color:var(--muted); letter-spacing:1px; margin-top:8px; font-family:sans-serif; }
+
+    /* MANIFESTO */
+    .manifesto { padding:64px 48px; background:var(--red); text-align:center; }
+    .man-q { font-family:'Barlow Condensed',sans-serif; font-size:30px; font-weight:700; letter-spacing:2px; color:#fff; text-transform:uppercase; max-width:740px; margin:0 auto 14px; line-height:1.35; }
+    .man-sub { font-size:13px; color:rgba(255,255,255,0.58); letter-spacing:2px; font-family:sans-serif; }
+
+    /* FOOTER */
+    footer { padding:28px 48px; background:#030508; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; border-top:1px solid rgba(94,207,220,0.08); }
+    .f-logo { font-family:'Barlow Condensed',sans-serif; font-size:22px; font-weight:900; letter-spacing:2px; color:#fff; text-decoration:none; }
+    .f-logo span { color:var(--cyan); }
+    .f-copy { font-size:12px; color:rgba(255,255,255,0.22); letter-spacing:1px; font-family:sans-serif; }
+    .f-social { display:flex; gap:22px; }
+    .f-social a { font-size:12px; letter-spacing:1.5px; color:rgba(255,255,255,0.28); text-decoration:none; text-transform:uppercase; font-weight:700; transition:color 0.2s; }
+    .f-social a:hover { color:var(--cyan); }
+
+    /* RESPONSIVE */
+    @media (max-width:700px) {
+      nav { padding:14px 20px; }
+      .nav-links { display:none; }
+      .hero { padding:70px 24px 60px; }
+      .hero-title { font-size:64px; }
+      .redes, .pillars { padding:50px 24px; }
+      .pv-banner { padding:40px 24px; gap:24px; }
+      .manifesto { padding:44px 24px; }
+      footer { padding:24px 20px; flex-direction:column; text-align:center; }
+      .f-social { justify-content:center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- INTRO -->
+  <div id="intro">
+    <div class="intro-x">X</div>
+    <div class="intro-brand">XC<em>RIDER</em>7</div>
+    <div class="intro-tagline">Educación · Seguridad · Comunidad</div>
+    <div class="intro-pv">🇨🇷 &nbsp;Pura Vida, Rider</div>
+    <div class="intro-progress"></div>
+  </div>
+
+  <!-- MAIN -->
+  <div id="main">
+
+    <nav>
+      <a href="#" class="logo">XC<span>RIDER</span>7</a>
+      <ul class="nav-links">
+        <li><a href="#redes">Mis Redes</a></li>
+        <li><a href="#pilares">Pilares</a></li>
+        <li><a href="#comunidad">Comunidad</a></li>
+      </ul>
+      <span class="nav-cr">🇨🇷 Pura Vida</span>
+    </nav>
+
+    <!-- HERO -->
+    <section class="hero">
+      <div class="hero-lines"><span></span><span></span><span></span><span></span></div>
+      <span class="badge-cr">🇨🇷 Costa Rica &amp; LATAM</span>
+      <h1 class="hero-title">XC<span>RIDER</span>7</h1>
+      <p class="hero-sub">Educación · Seguridad Vial · Comunidad Real</p>
+      <div class="divider-x">
+        <div class="divider-line"></div><span>X</span><div class="divider-line"></div>
+      </div>
+      <p class="hero-slogan">"La moto se disfruta más cuando sabés lo que estás haciendo."</p>
+      <div class="cta-row">
+        <a href="#redes" class="btn-primary">Seguime en redes</a>
+        <a href="#pilares" class="btn-outline">Ver el proyecto</a>
+      </div>
+    </section>
+
+    <!-- STATS -->
+    <div class="stats">
+      <div class="stat"><div class="stat-num">4</div><div class="stat-label">Plataformas activas</div></div>
+      <div class="stat"><div class="stat-num">CR</div><div class="stat-label">Con corazón tico</div></div>
+      <div class="stat"><div class="stat-num">0</div><div class="stat-label">Contenido comercial</div></div>
+    </div>
+
+    <!-- REDES / LINK IN BIO -->
+    <section class="redes" id="redes">
+      <div class="redes-header">
+        <p class="sec-eyebrow">Encontrame en</p>
+        <h2 class="sec-title">Mis redes sociales</h2>
+        <p class="redes-sub">Seguime y unite a la comunidad rider más honesta de Costa Rica y LATAM</p>
+      </div>
+
+      <div class="redes-grid">
+
+        <!-- TikTok — REEMPLAZÁ la URL con tu perfil real -->
+        <a href="https://www.tiktok.com/@xcrider7" target="_blank" rel="noopener" class="red-card card-tiktok">
+          <div class="red-icon icon-tiktok">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.3 6.3 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.18 8.18 0 0 0 4.78 1.52V6.75a4.85 4.85 0 0 1-1.01-.06z" fill="#69C9D0"/>
+            </svg>
+          </div>
+          <div class="red-info">
+            <p class="red-name">TikTok</p>
+            <p class="red-handle">@xcrider7</p>
+          </div>
+          <span class="red-arrow">→</span>
+        </a>
+
+        <!-- Instagram — REEMPLAZÁ la URL con tu perfil real -->
+        <a href="https://www.instagram.com/xcrider7" target="_blank" rel="noopener" class="red-card card-ig">
+          <div class="red-icon icon-ig">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="2" y="2" width="20" height="20" rx="5" stroke="#E1306C" stroke-width="2"/>
+              <circle cx="12" cy="12" r="4" stroke="#E1306C" stroke-width="2"/>
+              <circle cx="17.5" cy="6.5" r="1" fill="#E1306C"/>
+            </svg>
+          </div>
+          <div class="red-info">
+            <p class="red-name">Instagram</p>
+            <p class="red-handle">@xcrider7</p>
+          </div>
+          <span class="red-arrow">→</span>
+        </a>
+
+        <!-- YouTube — REEMPLAZÁ la URL con tu canal real -->
+        <a href="https://www.youtube.com/@xcrider7ll" target="_blank" rel="noopener" class="red-card card-yt">
+          <div class="red-icon icon-yt">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46A2.78 2.78 0 0 0 1.46 6.42 29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58 2.78 2.78 0 0 0 1.95 1.96C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 0 0 1.95-1.96A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z" fill="#FF0000"/>
+              <polygon points="9.75,15.02 15.5,12 9.75,8.98" fill="#fff"/>
+            </svg>
+          </div>
+          <div class="red-info">
+            <p class="red-name">YouTube</p>
+            <p class="red-handle">@xcrider7</p>
+          </div>
+          <span class="red-arrow">→</span>
+        </a>
+
+        <!-- Facebook — REEMPLAZÁ la URL con tu página real -->
+        <a href="https://www.facebook.com/xcrider7" target="_blank" rel="noopener" class="red-card card-fb">
+          <div class="red-icon icon-fb">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path d="M24 12.073C24 5.405 18.627 0 12 0S0 5.405 0 12.073C0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047V9.41c0-3.025 1.792-4.697 4.533-4.697 1.312 0 2.686.236 2.686.236v2.97h-1.513c-1.491 0-1.956.93-1.956 1.886v2.269h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.1 24 12.073z" fill="#1877F2"/>
+            </svg>
+          </div>
+          <div class="red-info">
+            <p class="red-name">Facebook</p>
+            <p class="red-handle">XCRider7</p>
+          </div>
+          <span class="red-arrow">→</span>
+        </a>
+
+      </div>
+
+      <!-- <div class="linkinbio-hint">
+        <p class="hint-title">💡 Tip — Link in Bio</p>
+        <p class="hint-text">
+          Subí esta página a internet y usá esa URL en la bio de todas tus redes sociales.<br>
+          Un solo link como <span class="hint-url">xcrider7.com</span> que lleva a todo tu contenido.
+        </p>
+      </div> -->
+    </section>
+
+    <!-- PILLARS -->
+    <section class="pillars" id="pilares">
+      <p class="sec-eyebrow" style="text-align:center">Arquitectura de contenido</p>
+      <h2 class="sec-title sec-title-center">Cinco pilares</h2>
+      <div class="pillars-grid">
+        <div class="pillar">
+          <div class="p-num">01</div>
+          <p class="p-title">Seguridad Vial</p>
+          <p class="p-desc">Análisis de riesgos, errores comunes y mejores prácticas. El diferenciador real.</p>
+        </div>
+        <div class="pillar">
+          <div class="p-num">02</div>
+          <p class="p-title">Educación del Piloto</p>
+          <p class="p-desc">Técnicas y mentalidad correcta para quien empieza a rodar con cabeza.</p>
+        </div>
+        <div class="pillar">
+          <div class="p-num">03</div>
+          <p class="p-title">Experiencia Real</p>
+          <p class="p-desc">Reseñas honestas de motos y rutas. Sin agenda comercial, sin filtros.</p>
+        </div>
+        <div class="pillar">
+          <div class="p-num">04</div>
+          <p class="p-title">Comunidad</p>
+          <p class="p-desc">Asesoría directa y conexión real con la comunidad rider de CR y LATAM.</p>
+        </div>
+        <div class="pillar">
+          <div class="p-num">05</div>
+          <p class="p-title">Aventura</p>
+          <p class="p-desc">Rutas con contexto histórico y logístico. La carretera tiene historia.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- PURA VIDA -->
+    <section class="pv-banner" id="comunidad">
+      <div class="pv-flag">🇨🇷</div>
+      <div>
+        <p class="pv-tag">Hecho con orgullo desde</p>
+        <p class="pv-text">Costa Rica · <span>Pura Vida</span></p>
+        <p class="pv-sub">Porque acá también sabemos rodar — y lo hacemos con respeto</p>
+      </div>
+      <div class="pv-flag">🏍️</div>
+    </section>
+
+    <!-- MANIFESTO -->
+    <section class="manifesto">
+      <p class="man-q">Ser un rider real implica pensar, anticipar y respetar la carretera.</p>
+      <p class="man-sub">XCRider7 · Plataforma educativa para el motociclista consciente</p>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+      <a href="#" class="f-logo">XC<span>RIDER</span>7</a>
+      <p class="f-copy">© 2025 XCRider7 · Costa Rica 🇨🇷</p>
+      <div class="f-social">
+        <a href="https://www.tiktok.com/@xcrider7" target="_blank">TikTok</a>
+        <a href="https://www.instagram.com/xcrider7" target="_blank">Instagram</a>
+        <a href="https://www.youtube.com/@xcrider7ll" target="_blank">YouTube</a>
+        <a href="https://www.facebook.com/xcrider7" target="_blank">Facebook</a>
+      </div>
+    </footer>
+
+  </div>
+
+  <script>
+    setTimeout(function(){
+      document.getElementById('intro').classList.add('hide');
+      document.getElementById('main').classList.add('show');
+    }, 3500);
+
+    document.querySelectorAll('.pillar').forEach(function(c){
+      c.addEventListener('mouseenter', function(){ this.querySelector('.p-num').style.color = 'rgba(94,207,220,0.25)'; });
+      c.addEventListener('mouseleave', function(){ this.querySelector('.p-num').style.color = 'rgba(94,207,220,0.1)'; });
+    });
+  </script>
+
+</body>
+</html>
